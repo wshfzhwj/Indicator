@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LineIndicator">
+        <attr name="selected_color" format="color|reference"/>
+        <attr name="default_color" format="color|reference"/>
+        <attr name="radius" format="dimension|reference"/>
+        <attr name="distance" format="dimension|reference"/>
+        <attr name="num" format="integer"/>
+    </declare-styleable>
+</resources>
