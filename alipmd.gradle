@@ -25,7 +25,6 @@ pmd {
 }
 
 task pmd(type: Pmd, group: 'verification') {
-    ignoreFailures = false
     try {//try一下，即使发生异常也不影响正常编译
 
         def isCheck = true //是否打开代码规范检查的开关

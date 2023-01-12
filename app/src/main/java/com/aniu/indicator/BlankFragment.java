@@ -20,7 +20,7 @@ public class BlankFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("sss","dddd");
+        Log.e("sss","ddssssdd");
         View root = inflater.inflate(R.layout.fragment_blank, container, false);
         TextView viewById = (TextView) root.findViewById(R.id.textview1);
         String key = getArguments().getString("key");
