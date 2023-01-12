@@ -1,0 +1,1098 @@
+<?xml version="1.0"?>
+
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="AlibabaJavaComments"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+
+    <rule name="CommentsMustBeJavadocFormatRule" class="com.alibaba.p3c.pmd.lang.java.rule.comment.CommentsMustBeJavadocFormatRule"
+        message="java.comment.CommentsMustBeJavadocFormatRule.rule.msg">
+        <description>java.comment.CommentsMustBeJavadocFormatRule.rule.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    /**
+     * 
+     * XXX class function description.
+     *
+     */
+    public class XxClass implements Serializable {
+        private static final long serialVersionUID = 113323427779853001L;
+        /**
+         * id
+         */
+        private Long id;
+        /**
+         * title
+         */
+        private String title;
+    
+        /**
+         * find by id
+         * 
+         * @param ruleId rule id
+         * @param page start from 1
+         * @return Result<Xxxx>
+         */
+        public Result<Xxxx> funcA(Long ruleId, Integer page) {
+            return null;
+        }
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comment.AbstractMethodOrInterfaceMethodMustUseJavadocRule"
+        message="java.comment.AbstractMethodOrInterfaceMethodMustUseJavadocRule.rule.msg">
+        <description>java.comment.AbstractMethodOrInterfaceMethodMustUseJavadocRule.rule.desc
+        </description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    /**
+     * fetch data by rule id
+     * 
+     * @param ruleId rule id
+     * @param page page number
+     * @param jsonContext json format context
+     * @return Result<XxxxDO>
+     */
+    Result<XxxxDO> fetchDataByRuleId(Long ruleId, Integer page, String jsonContext);
+]]>
+        </example>
+    </rule>
+
+    <rule name="ClassMustHaveAuthorRule" class="com.alibaba.p3c.pmd.lang.java.rule.comment.ClassMustHaveAuthorRule"
+        message="java.comment.ClassMustHaveAuthorRule.rule.msg">
+        <description>java.comment.ClassMustHaveAuthorRule.rule.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    /**
+     * Demo class
+     * 
+     * @author keriezhang
+     * @date 2016/10/31
+     */
+    public class CodeNoteDemo {
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="EnumConstantsMustHaveCommentRule" class="com.alibaba.p3c.pmd.lang.java.rule.comment.EnumConstantsMustHaveCommentRule"
+        message="java.comment.EnumConstantsMustHaveCommentRule.rule.msg">
+        <priority>2</priority>
+
+        <example>
+            <![CDATA[
+    public enum TestEnum {
+        /**
+         * agree
+         */
+        agree("agree"),
+        /**
+         * reject
+         */
+        reject("reject");
+        
+        private String action;
+    
+        TestEnum(String action) {
+            this.action = action;
+        }
+    
+        public String getAction() {
+            return action;
+        }
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="AvoidCommentBehindStatementRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comment.AvoidCommentBehindStatementRule"
+        message="java.comment.AvoidCommentBehindStatementRule.rule.msg">
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    public void method() {
+        // Put single line comment above code. (Note: align '//' comment with code)
+        int a = 3;
+    
+        /**
+        * Some description about follow code. (Note: align '/**' comment with code)
+        */
+        int b = 4;
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="RemoveCommentedCodeRule" class="com.alibaba.p3c.pmd.lang.java.rule.comment.RemoveCommentedCodeRule"
+        message="java.comment.RemoveCommentedCodeRule.rule.msg">
+        <description>java.comment.RemoveCommentedCodeRule.rule.desc</description>
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+Positive example: For codes which are temporarily removed and likely to be reused, use /// to add a reasonable note.
+ public static void hello() {
+    /// Business is stopped temporarily by the owner.
+    // Business business = new Business();
+    // business.active();
+    System.out.println("it's finished");
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="ThreadPoolCreationRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadPoolCreationRule" language="java" message="java.concurrent.ThreadPoolCreationRule.rule.msg"
+        since="1.6">
+        <description>java.concurrent.ThreadPoolCreationRule.rule.desc</description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+Positive example 1：
+    //org.apache.commons.lang3.concurrent.BasicThreadFactory
+    ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+        new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+       ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 2：
+    ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+
+    //Common Thread Pool
+    ExecutorService pool = new ThreadPoolExecutor(5, 200,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    pool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    pool.shutdown();//gracefully shutdown
+       ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 3：
+    <bean id="userThreadPool"
+        class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10" />
+        <property name="maxPoolSize" value="100" />
+        <property name="queueCapacity" value="2000" />
+
+    <property name="threadFactory" value= threadFactory />
+        <property name="rejectedExecutionHandler">
+            <ref local="rejectedExecutionHandler" />
+        </property>
+    </bean>
+    //in code
+    userThreadPool.execute(thread);
+       ]]>
+        </example>
+    </rule>
+    <rule name="AvoidUseTimerRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidUseTimerRule" language="java" message="java.concurrent.AvoidUseTimerRule.rule.msg"
+        since="1.6">
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+    //org.apache.commons.lang3.concurrent.BasicThreadFactory
+    ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+        new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+    executorService.scheduleAtFixedRate(new Runnable() {
+        @Override
+        public void run() {
+            //do something
+        }
+    },initialDelay,period, TimeUnit.HOURS);
+       ]]>
+        </example>
+    </rule>
+    <rule name="AvoidManuallyCreateThreadRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidManuallyCreateThreadRule" dfa="true" language="java"
+        message="java.concurrent.AvoidManuallyCreateThreadRule.rule.msg" since="1.6">
+        <description>java.concurrent.AvoidManuallyCreateThreadRule.rule.desc</description>
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+    ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    singleThreadPool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    singleThreadPool.shutdown();
+    ]]>
+        </example>
+    </rule>
+    <rule name="ThreadShouldSetNameRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadShouldSetNameRule" dfa="true" language="java"
+        message="java.concurrent.ThreadShouldSetNameRule.rule.msg" since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+    ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    singleThreadPool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    singleThreadPool.shutdown();
+    ]]>
+        </example>
+        <example>
+            <![CDATA[
+    public class TimerTaskThread extends Thread {
+        public TimerTaskThread() {
+            super.setName("TimerTaskThread");
+            // do something
+        }
+    }
+       ]]>
+        </example>
+    </rule>
+    <rule name="AvoidCallStaticSimpleDateFormatRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidCallStaticSimpleDateFormatRule" dfa="true" language="java"
+        message="java.concurrent.AvoidCallStaticSimpleDateFormatRule.rule.msg" since="1.6">
+        <description>java.concurrent.AvoidCallStaticSimpleDateFormatRule.rule.desc</description>
+
+        <example>
+            <![CDATA[
+Positive example 1：
+    private static final String FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public String getFormat(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT);
+        return dateFormat.format(date);
+    }
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 2：
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public void getFormat() {
+        synchronized(SIMPLE_DATE_FORMAT) {
+            SIMPLE_DATE_FORMAT.format(new Date());
+            // do something
+        }
+    }
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 3：
+    private static final ThreadLocal<DateFormat> DATE_FORMATTER = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd");
+        }
+    };
+        ]]>
+        </example>
+        <priority>2</priority>
+    </rule>
+
+    <rule name="ThreadLocalShouldRemoveRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadLocalShouldRemoveRule" dfa="true" language="java"
+        message="java.concurrent.ThreadLocalShouldRemoveRule.rule.msg" since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class UserHolder {
+        private static final ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
+
+        public static void set(User user){
+            userThreadLocal.set(user);
+        }
+
+        public static User get(){
+            return userThreadLocal.get();
+        }
+
+        public static void remove(){
+            userThreadLocal.remove();
+        }
+    }
+
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class UserInterceptor extends HandlerInterceptorAdapter {
+        @Override
+        public boolean preHandle(HttpServletRequest request,
+            HttpServletResponse response, Object handler) throws Exception {
+            UserHolder.set(new User());
+            return true;
+        }
+
+        @Override
+        public void afterCompletion(HttpServletRequest request,
+            HttpServletResponse response, Object handler, Exception ex) throws Exception {
+            UserHolder.remove();
+        }
+    }
+        ]]>
+        </example>
+    </rule>
+    <rule name="AvoidConcurrentCompetitionRandomRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidConcurrentCompetitionRandomRule" dfa="true" language="java"
+        message="java.concurrent.AvoidConcurrentCompetitionRandomRule.rule.msg" since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+Positive example 1：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class RandomInThread extends Thread {
+        private Random random = new Random();
+
+        @Override
+        public void run() {
+            long t = random.nextLong();
+        }
+    }
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 2：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class RandomInThread extends Thread {
+        private Random random = ThreadLocalRandom.current();
+
+        @Override
+        public void run() {
+            long t = random.nextLong();
+        }
+    }
+        ]]>
+        </example>
+    </rule>
+    <rule name="CountDownShouldInFinallyRule" class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.CountDownShouldInFinallyRule" dfa="true" language="java"
+        message="java.concurrent.CountDownShouldInFinallyRule.rule.msg" since="1.6">
+        <description>java.concurrent.CountDownShouldInFinallyRule.rule.desc</description>
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class CountDownExample {
+        public void operate(CountDownLatch countDownLatch){
+            try{
+                System.out.println("business logic");
+            }catch (RuntimeException e){
+                // do something
+            }finally {
+                countDownLatch.countDown();
+            }
+        }
+    }
+        ]]>
+        </example>
+    </rule>
+
+    <rule name="UpperEllRule" class="com.alibaba.p3c.pmd.lang.java.rule.constant.UpperEllRule"
+        message="java.constant.UpperEllRule.rule.msg">
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+Negative example:
+    //It is hard to tell whether it is number 11 or Long 1.
+    Long warn = 1l;
+       ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    Long notwarn = 1L;
+        ]]>
+         </example>
+    </rule>
+
+    <rule name="UndefineMagicConstantRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.constant.UndefineMagicConstantRule"
+        message="java.constant.UndefineMagicConstantRule.rule.msg">
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+Negative example:
+    //Magic values, except for predefined, are forbidden in coding.
+    if (key.equals("Id#taobao_1")) {
+            //...
+    }
+         ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    String KEY_PRE = "Id#taobao_1";  
+    if (KEY_PRE.equals(key)) {
+            //...
+    }
+      ]]>
+      </example>
+    </rule>
+
+    <rule name="MethodReturnWrapperTypeRule" class="com.alibaba.p3c.pmd.lang.java.rule.exception.MethodReturnWrapperTypeRule" language="java" message="java.exception.MethodReturnWrapperTypeRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+    public int method() {
+        Integer a = null;
+        return a;
+    }
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="AvoidReturnInFinallyRule" class="com.alibaba.p3c.pmd.lang.java.rule.exception.AvoidReturnInFinallyRule" language="java"
+        message="java.exception.AvoidReturnInFinallyRule.rule.msg">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Negative example:
+    public static Long readFileLength(String fileName) {
+        try {
+            File file = new File(fileName);
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            return randomAccessFile.length();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            countDownLatch.countDown();
+            return 0L;
+        }
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="TransactionMustHaveRollbackRule" class="com.alibaba.p3c.pmd.lang.java.rule.exception.TransactionMustHaveRollbackRule" dfa="true" language="java"
+        message="java.exception.TransactionMustHaveRollbackRule.rule.msg" since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+Positive example 1：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    @Transactional(rollbackFor = Exception.class)
+    public class UserServiceImpl implements UserService {
+        @Override
+        public void save(User user) {
+            //some code
+            //db operation
+        }
+    }
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 2：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    public class UserServiceImpl implements UserService {
+        @Override
+        @Transactional(rollbackFor = Exception.class)
+        public void save(User user) {
+            //some code
+            //db operation
+        }
+    }
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example 3：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    public class UserServiceImpl implements UserService {
+        @Autowired
+        private DataSourceTransactionManager transactionManager;
+
+        @Override
+        @Transactional
+        public void save(User user) {
+            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+            // explicitly setting the transaction name is something that can only be done programmatically
+            def.setName("SomeTxName");
+            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+            TransactionStatus status = transactionManager.getTransaction(def);
+            try {
+                // execute your business logic here
+                //db operation
+            } catch (Exception ex) {
+                transactionManager.rollback(status);
+                throw ex;
+            }
+        }
+    }
+        ]]>
+        </example>
+    </rule>
+
+    <rule name="SwitchStatementRule" class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.SwitchStatementRule" language="java"
+        message="java.flowcontrol.SwitchStatementRule.rule.msg">
+        <priority>2</priority>
+
+        <example>
+            <![CDATA[
+    switch (x) {
+        case 1:
+            break;
+        case 2:
+            break;
+        default:
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="NeedBraceRule" class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.NeedBraceRule" language="java"
+        message="java.flowcontrol.NeedBraceRule.rule.msg">
+        <priority>1</priority>
+
+        <example>
+            <![CDATA[
+    if (flag) {
+            System.out.println("hello world");
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="AvoidComplexConditionRule" class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.AvoidComplexConditionRule" language="java"
+        message="java.flowcontrol.AvoidComplexConditionRule.rule.msg">
+        <description>java.flowcontrol.AvoidComplexConditionRule.rule.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+Negative example:
+    if ((file.open(fileName, "w") != null) && (...) || (...)) {
+        // ...
+    }
+			]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    boolean existed = (file.open(fileName, "w") != null) && (...) || (...);
+    if (existed) {
+        //...
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="AvoidNegationOperatorRule" class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.AvoidNegationOperatorRule" language="java"
+        message="java.flowcontrol.AvoidNegationOperatorRule.rule.msg">
+        <description>java.flowcontrol.AvoidNegationOperatorRule.rule.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+Negative example:
+    // Use `if (!(x >= 628))` to represent that x is less than 628.
+    if (!(x >= 628)) {
+        // ...
+    }
+			]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    // Use `if (x < 628)` to represent that x is less than 628.
+    if (x < 628)) {
+        // ...
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="ClassNamingShouldBeCamelRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.ClassNamingShouldBeCamelRule" language="java" message="java.naming.ClassNamingShouldBeCamelRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+    </rule>
+
+    <rule name="AbstractClassShouldStartWithAbstractNamingRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.AbstractClassShouldStartWithAbstractNamingRule" language="java" message="java.naming.AbstractClassShouldStartWithAbstractNamingRule.rule.msg"
+        since="1.4">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    abstract class BaseControllerDemo{
+    }
+
+    abstract class AbstractActionDemo{
+    }
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ExceptionClassShouldEndWithExceptionRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.ExceptionClassShouldEndWithExceptionRule" language="java" message="java.naming.ExceptionClassShouldEndWithExceptionRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    public class CacheDemoException extends Exception{
+    }
+            ]]>
+        </example>
+    </rule>
+
+
+    <rule name="TestClassShouldEndWithTestNamingRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassShouldEndWithTestNamingRule" language="java" message="java.naming.TestClassShouldEndWithTestNamingRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+    public class DemoTest {
+    }
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="LowerCamelCaseVariableNamingRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule" language="java" message="java.naming.LowerCamelCaseVariableNamingRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+    </rule>
+
+    <rule name="AvoidStartWithDollarAndUnderLineNamingRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.AvoidStartWithDollarAndUnderLineNamingRule" language="java" message="java.naming.AvoidStartWithDollarAndUnderLineNamingRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+    </rule>
+
+    <rule name="ConstantFieldShouldBeUpperCaseRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.ConstantFieldShouldBeUpperCaseRule" language="java" message="java.naming.ConstantFieldShouldBeUpperCaseRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    public class ConstantNameDemo {
+
+    /**
+    * max stock count
+    */
+    public static final Long MAX_STOCK_COUNT = 50000L;
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ServiceOrDaoClassShouldEndWithImplRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.ServiceOrDaoClassShouldEndWithImplRule" language="java" message="java.naming.ServiceOrDaoClassShouldEndWithImplRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    public interface DemoService{
+        void f();
+    }
+
+    public class DemoServiceImpl implements DemoService {
+        @Override
+        public void f(){
+            System.out.println("hello world");
+        }
+    }
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="PackageNamingRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.PackageNamingRule" language="java" message="java.naming.PackageNamingRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+    com.alibaba.mpp.util / com.taobao.tddl.domain.dto
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="BooleanPropertyShouldNotStartWithIsRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.BooleanPropertyShouldNotStartWithIsRule" language="java" message="java.naming.BooleanPropertyShouldNotStartWithIsRule.rule.msg"
+        since="1.6">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    public class DemoDO{
+        Boolean success;
+        Boolean delete;
+    }
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ArrayNamingShouldHaveBracketRule" class="com.alibaba.p3c.pmd.lang.java.rule.naming.ArrayNamingShouldHaveBracketRule" language="java" message="java.naming.ArrayNamingShouldHaveBracketRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+    String[] a = new String[3];
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="EqualsAvoidNullRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.EqualsAvoidNullRule" language="java"
+        message="java.oop.EqualsAvoidNullRule.rule.msg">
+        <priority>2</priority>
+
+        <example>
+            <![CDATA[
+    public void f(String str){
+        String inner = "hi";
+        if (inner.equals(str)) {
+            System.out.println("hello world");
+        }
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="WrapperTypeEqualityRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.WrapperTypeEqualityRule" language="java"
+        message="java.oop.WrapperTypeEqualityRule.rule.msg">
+        <description>java.oop.WrapperTypeEqualityRule.rule.desc</description>
+        <priority>1</priority>
+
+        <example>
+            <![CDATA[
+    Integer a = 235;
+    Integer b = 235;
+    if (a.equals(b)) {
+        // code
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="PojoMustUsePrimitiveFieldRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoMustUsePrimitiveFieldRule" language="java"
+        message="java.oop.PojoMustUsePrimitiveFieldRule.rule.msg">
+        <description>java.oop.PojoMustUsePrimitiveFieldRule.rule.msg.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    public class DemoDO {
+        String str;
+        Integer a;
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="PojoNoDefaultValueRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoNoDefaultValueRule" language="java"
+        message="java.oop.PojoNoDefaultValueRule.rule.msg">
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    public class DemoDO {
+        String str;
+        Integer a;
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="PojoMustOverrideToStringRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoMustOverrideToStringRule" language="java"
+        message="java.oop.PojoMustOverrideToStringRule.rule.msg">
+        <description>java.oop.PojoMustOverrideToStringRule.rule.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+    public class ToStringDemo extends Super{
+        private String secondName;
+
+        @Override
+        public String toString() {
+            return super.toString() + "ToStringDemo{" + "secondName='" + secondName + '\'' + '}';
+        }
+    }
+
+    class Super {
+        private String firstName;
+
+        @Override
+        public String toString() {
+            return "Super{" + "firstName=" + firstName + '\'' + '}';
+        }
+    }
+			]]>
+        </example>
+    </rule>
+
+    <rule name="StringConcatRule" class="com.alibaba.p3c.pmd.lang.java.rule.oop.StringConcatRule" language="java" message="java.oop.StringConcatRule.rule.msg">
+        <description>java.oop.StringConcatRule.rule.msg.desc</description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+Negative example:
+    String result;
+    for (String string : tagNameList) {
+        result = result + string;
+    }
+]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    StringBuilder stringBuilder = new StringBuilder();
+    for (String string : tagNameList) {
+        stringBuilder.append(string);
+    }
+    String result = stringBuilder.toString();
+]]>
+        </example>
+    </rule>
+
+    <rule name="IbatisMethodQueryForListRule" class="com.alibaba.p3c.pmd.lang.java.rule.orm.IbatisMethodQueryForListRule" language="java" message="java.naming.IbatisMethodQueryForListRule.rule.msg"
+        since="1.6">
+        <priority>3</priority>
+    </rule>
+
+    <rule name="AvoidPatternCompileInMethodRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.AvoidPatternCompileInMethodRule"
+        language="java"
+        message="java.other.AvoidPatternCompileInMethodRule.rule.msg">
+        <description>java.other.AvoidPatternCompileInMethodRule.rule.desc</description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+    public class XxxClass {
+        // Use precompile
+        private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+        public Pattern getNumberPattern() {
+            // Avoid use Pattern.compile in method body.
+            Pattern localPattern = Pattern.compile("[0-9]+");
+            return localPattern;
+        }
+    }
+]]>
+      </example>
+    </rule>
+
+    <rule name="AvoidApacheBeanUtilsCopyRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.AvoidApacheBeanUtilsCopyRule"
+        language="java"
+        message="java.other.AvoidApacheBeanUtilsCopyRule.rule.msg">
+        <description>java.other.AvoidApacheBeanUtilsCopyRule.rule.desc</description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+    TestObject a = new TestObject();
+    TestObject b = new TestObject();
+    a.setX(b.getX());
+    a.setY(b.getY());
+]]>
+      </example>
+    </rule>
+
+    <rule name="AvoidNewDateGetTimeRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.AvoidNewDateGetTimeRule"
+        language="java"
+        message="java.other.AvoidNewDateGetTimeRule.rule.msg">
+        <description>java.other.AvoidNewDateGetTimeRule.rule.desc</description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+    public class TimeMillisDemo {
+        public static void main(String args[]) {
+            // Positive example:
+            long a = System.currentTimeMillis();
+            // Negative example:
+            long b = new Date().getTime();
+    
+            System.out.println(a);
+            System.out.println(b);
+        }
+    }
+]]>
+      </example>
+    </rule>
+
+    <rule name="AvoidMissUseOfMathRandomRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.AvoidMissUseOfMathRandomRule" language="java"
+        message="java.other.AvoidMissUseOfMathRandomRule.rule.msg">
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+Negative example:
+    Long randomLong =(long) (Math.random() * 10);
+]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+    Long randomLong = new Random().nextLong();
+]]>
+        </example>
+    </rule>
+
+    <rule name="MethodTooLongRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.MethodTooLongRule" language="java"
+        message="java.other.MethodTooLongRule.rule.msg">
+        <description>java.other.MethodTooLongRule.rule.desc</description>
+        <priority>3</priority>
+    </rule>
+
+    <rule name="UseRightCaseForDateFormatRule" class="com.alibaba.p3c.pmd.lang.java.rule.other.UseRightCaseForDateFormatRule" language="java"
+        message="java.other.UseRightCaseForDateFormatRule.rule.msg">
+        <description>java.other.UseRightCaseForDateFormatRule.rule.desc</description>
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Negative example:
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+ ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+        SimpleDateFormat format = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss");
+]]>
+        </example>
+    </rule>
+
+    <rule name="ClassCastExceptionWithToArrayRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.ClassCastExceptionWithToArrayRule"
+        message="java.set.ClassCastExceptionWithToArrayRule.rule.msg">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Negative example:  
+   Integer[] a = (Integer [])c.toArray();
+        ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example： 
+   Integer[] b = (Integer [])c.toArray(new Integer[c.size()]); 
+         ]]>
+        </example>
+    </rule>
+
+    <rule name="UnsupportedExceptionWithModifyAsListRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.UnsupportedExceptionWithModifyAsListRule"
+        message="java.set.UnsupportedExceptionWithModifyAsListRule.rule.msg">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Positive example:
+   List<String> t   = Arrays.asList("a","b","c"); 
+   //warn
+   t.add("22");
+   //warn
+   t.remove("22");
+   //warn
+   t.clear(); 
+         ]]>
+         </example>
+    </rule>
+
+    <rule name="ClassCastExceptionWithSubListToArrayListRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.ClassCastExceptionWithSubListToArrayListRule"
+        message="java.set.ClassCastExceptionWithSubListToArrayListRule.rule.msg">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Negative example:
+   List<String> list = new ArrayList<String>();
+   list.add("22");
+   //warn
+   List<String> test = (ArrayList<String>) list.subList(0, 1);	 
+         ]]>
+        </example>
+        <example>
+            <![CDATA[
+Positive example:
+   List<String> list2 = new ArrayList<String>(list.subList(0, 1));
+         ]]>
+         </example>
+    </rule>
+
+    <rule name="ConcurrentExceptionWithModifyOriginSubListRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.ConcurrentExceptionWithModifyOriginSubListRule"
+        message="java.set.ConcurrentExceptionWithModifyOriginSubListRule.rule.msg">
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+Negative example:                
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   List<String> subList = originList.subList(0, 1);
+   //warn
+   originList.add("22"); 
+       ]]>
+         </example>
+    </rule>
+
+
+    <rule name="DontModifyInForeachCircleRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.DontModifyInForeachCircleRule"
+        message="java.set.DontModifyInForeachCircleRule.rule.msg">
+        <priority>1</priority>
+
+        <example>
+            <![CDATA[
+ Negative example:   
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   for (String item : originList) { 
+      //warn
+      list.add("bb");
+   }  
+        ]]>
+       </example>
+        <example>
+            <![CDATA[
+ Positive example: 
+   Iterator<Integer> it=b.iterator();		 
+   while(it.hasNext()){                      
+      Integer temp =  it.next();             
+      if (delCondition) {
+          it.remove();
+      }
+   }
+         ]]>
+      </example>
+    </rule>
+
+    <rule name="CollectionInitShouldAssignCapacityRule"
+        class="com.alibaba.p3c.pmd.lang.java.rule.set.CollectionInitShouldAssignCapacityRule"
+        message="java.set.CollectionInitShouldAssignCapacityRule.rule.msg">
+        <description>java.set.CollectionInitShouldAssignCapacityRule.rule.msg.desc</description>
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+ Negative example:   
+   Map<String, String> map = new HashMap<String, String>();
+    
+        ]]>
+       </example>
+        <example>
+            <![CDATA[
+ Positive example: 
+   Map<String, String> map = new HashMap<String, String>(16);
+         ]]>
+      </example>
+    </rule>
+</ruleset>
