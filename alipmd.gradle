@@ -30,7 +30,7 @@ task pmd(type: Pmd, group: 'verification') {
         def isCheck = true //是否打开代码规范检查的开关
         def isCommit = project.hasProperty('checkCommit') //是否是提交前检查
         if (isCheck) {
-            if (isCommit) {
+            if (true) {
                 //检测代码路径
                 source project.rootDir //--- 检查项目中所有的文件, 比较慢, 下面分模块检查, 主要是src下面的java文件
 //                source 'xxx/src'
